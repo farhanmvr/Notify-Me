@@ -13,11 +13,20 @@ class SubjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final sub = Provider.of<SubjectList>(context).getSub(subject.subId);
     final subData = Provider.of<SubjectList>(context);
-    final percent = (Provider.of<SubjectList>(context).percentage(sub.id)*10).truncateToDouble()/10;
+    final percent =
+        (Provider.of<SubjectList>(context).percentage(sub.id) * 10).truncateToDouble() / 10;
     final goal = Provider.of<Attendance>(context).goal;
-    final isSafe = Provider.of<SubjectList>(context).isSafe(goal: goal,id: sub.id);
+    final isSafe = Provider.of<SubjectList>(context).isSafe(goal: goal, id: sub.id);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 15, top: 4),
+          child: Text(
+            subject.time.format(context),
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
         GestureDetector(
           onTap: () {
             // Navigator.of(context).pushNamed(CalendarViewScreen.routeName, arguments: subject.id);
@@ -25,7 +34,7 @@ class SubjectTile extends StatelessWidget {
           child: Card(
             elevation: 2,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               child: Row(
@@ -70,7 +79,7 @@ class SubjectTile extends StatelessWidget {
                             Text(
                               'Status:',
                               style: TextStyle(
-                                  color: Colors.grey, fontWeight: FontWeight.w700, fontSize: 13),
+                                  color: Colors.grey, fontWeight: FontWeight.w400, fontSize: 12),
                             ),
                             SizedBox(
                               width: 2,
@@ -90,7 +99,7 @@ class SubjectTile extends StatelessWidget {
                     children: <Widget>[
                       CircularPercentIndicator(
                         radius: 58,
-                        percent: percent/100,
+                        percent: percent / 100,
                         lineWidth: 4,
                         circularStrokeCap: CircularStrokeCap.round,
                         progressColor: isSafe ? Colors.green : Theme.of(context).errorColor,

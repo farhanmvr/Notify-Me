@@ -22,42 +22,52 @@ class DaySubjects with ChangeNotifier {
   List<DaySubject> get satSub => [..._satSub];
   List<DaySubject> get sunSub => [..._sunSub];
 
-  void addSubject({Day day, DaySubject subject}) {
+  // Get array by day
+  List<DaySubject> getSubArray(Day day) {
     switch (day.value) {
       case 1:
-        _sunSub.add(subject);
-        break;
+        return _sunSub;
       case 2:
-        _monSub.add(subject);
-        break;
+        return _monSub;
       case 3:
-        _tueSub.add(subject);
-        break;
+        return _tueSub;
       case 4:
-        _wedSub.add(subject);
-        break;
+        return _wedSub;
       case 5:
-        _thuSub.add(subject);
-        break;
+        return _thuSub;
       case 6:
-        _friSub.add(subject);
-        break;
+        return _friSub;
       case 7:
-        _satSub.add(subject);
-        break;
+        return _satSub;
     }
-    notifyListeners();
+  }
+
+  // Get all arrays
+  List<List<DaySubject>> getAllArray() {
+    return [_sunSub, _monSub, _tueSub, _wedSub, _thuSub, _friSub, _satSub];
+  }
+
+  // Add subject
+  void addSubject({Day day, DaySubject subject}) {
+    final subArray = getSubArray(day);
+    subArray.add(subject);
     DateTime now = DateTime.now();
+    subArray.sort(
+      (a, b) => DateTime(now.year, now.month, now.day, a.time.hour, a.time.minute).compareTo(
+        DateTime(now.year, now.month, now.day, b.time.hour, b.time.minute),
+      ),
+    );
+    notifyListeners();
     final time = DateTime(now.year, now.month, now.day, subject.time.hour, subject.time.minute);
     TimeTableDBHelper.insert({
       'id': subject.id,
       'subId': subject.subId,
-      'name': subject.name,
       'day': subject.day.value,
       'time': time.toIso8601String(),
     });
   }
 
+  // Fetch all subjects
   Future<void> fetchTimeTable() async {
     List<Map<String, dynamic>> subList = await TimeTableDBHelper.timeTable;
     subList.forEach((element) {
@@ -66,34 +76,37 @@ class DaySubjects with ChangeNotifier {
       DaySubject sub = DaySubject(
         id: element['id'],
         subId: element['subId'],
-        name: element['name'],
         day: Day(element['day']),
         time: time,
       );
-      switch (sub.day.value) {
-        case 1:
-          _sunSub.add(sub);
-          break;
-        case 2:
-          _monSub.add(sub);
-          break;
-        case 3:
-          _tueSub.add(sub);
-          break;
-        case 4:
-          _wedSub.add(sub);
-          break;
-        case 5:
-          _thuSub.add(sub);
-          break;
-        case 6:
-          _friSub.add(sub);
-          break;
-        case 7:
-          _satSub.add(sub);
-          break;
-      }
+      final subArray = getSubArray(sub.day);
+      subArray.add(sub);
     });
+    sort();
     notifyListeners();
+  }
+
+  // Delete all subjects by id
+  void deleteDaySubject(String id) {
+    _monSub.removeWhere((el) => el.subId == id);
+    _tueSub.removeWhere((el) => el.subId == id);
+    _wedSub.removeWhere((el) => el.subId == id);
+    _thuSub.removeWhere((el) => el.subId == id);
+    _friSub.removeWhere((el) => el.subId == id);
+    _satSub.removeWhere((el) => el.subId == id);
+    _sunSub.removeWhere((el) => el.subId == id);
+    notifyListeners();
+  }
+
+  // Sort all arrays
+  void sort() {
+    DateTime date = DateTime.now();
+    getAllArray().forEach((subArray) {
+      subArray.sort(
+        (a, b) => DateTime(date.year, date.month, date.day, a.time.hour, a.time.minute).compareTo(
+          DateTime(date.year, date.month, date.day, b.time.hour, b.time.minute),
+        ),
+      );
+    });
   }
 }

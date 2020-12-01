@@ -6,7 +6,11 @@ import '../main.dart';
 class NotificationHelper {
   // Schedule on any day and time
   static void scheduleAlarm(
-      {DateTime dateTime, int id, String title, String body, String payload}) async {
+      {@required DateTime dateTime,
+      @required int id,
+      @required String title,
+      @required String body,
+      String payload = ''}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
@@ -41,13 +45,14 @@ class NotificationHelper {
     @required String body,
     @required Day day,
     @required Time time,
-    String payload,
+    String payload = '',
   }) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
       'Channel for Alarm notification',
       icon: 'ic_launcher',
+      priority: Priority.High,
       // sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
       largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
     );
@@ -57,7 +62,18 @@ class NotificationHelper {
     var platformChannelSpecifics =
         NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-        id, title, body, day, time, platformChannelSpecifics,
-        payload: payload);
+      id,
+      title,
+      body,
+      day,
+      time,
+      platformChannelSpecifics,
+      payload: payload,
+    );
+  }
+
+  // Delete Notification
+  static Future<void> deleteNotificatons(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

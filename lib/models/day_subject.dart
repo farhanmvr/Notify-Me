@@ -4,9 +4,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class DaySubject {
   String id;
   String subId;
-  String name;
   Day day;
   TimeOfDay time;
 
-  DaySubject({this.id, this.subId, this.name, this.day, this.time});
+  DaySubject({this.id, this.subId, this.day, this.time});
 }

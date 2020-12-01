@@ -35,14 +35,24 @@ class Body extends StatelessWidget {
         subList = daySubData.sunSub;
         break;
     }
-    return ListView.builder(
-      itemCount: subList.length,
-      itemBuilder: (context, index) => Column(
-        children: [
-          SubjectTile(subList[index]),
-            if (index != subList.length - 1) Divider(),
-        ],
+    return ScrollConfiguration(
+      behavior: MyBehavior(),
+      child: ListView.builder(
+        itemCount: subList.length,
+        itemBuilder: (context, index) => Column(
+          children: [
+            SubjectTile(subList[index]),
+            // if (index != subList.length - 1) Divider(),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }

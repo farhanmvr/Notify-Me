@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 import './db_helper.dart';
 
-class TimeTableDBHelper{
+class TimeTableDBHelper {
   static Future<void> insert(Map<String, dynamic> data) async {
     try {
       var db = await DBHelper.database();
@@ -12,8 +12,18 @@ class TimeTableDBHelper{
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getNotificationIds(String id) async {
+    final db = await DBHelper.database();
+    return db.rawQuery('SELECT id FROM timetable WHERE subId = ?', [id]);
+  }
+
   static Future<List<Map<String, dynamic>>> get timeTable async {
-    var db = await DBHelper.database();
+    final db = await DBHelper.database();
     return db.query('timetable');
+  }
+
+  static Future<void> deleteBySubId(String id) async {
+    final db = await DBHelper.database();
+    await db.rawDelete('DELETE FROM timetable WHERE subId = ?', [id]);
   }
 }

@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../widgets/homeScreen/body.dart';
 import '../widgets/homeScreen/main_drawer.dart';
+import '../widgets/homeScreen/home_detail_card.dart';
 import '../providers/subject_list.dart';
 import '../providers/day_subject_list.dart';
+import '../providers/assignment_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -17,8 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFirst = true;
 
   Future<void> onStart() async {
-    await Provider.of<DaySubjects>(context, listen: false).fetchTimeTable();
     await Provider.of<SubjectList>(context, listen: false).fetchAllSubjects();
+    await Provider.of<DaySubjects>(context, listen: false).fetchTimeTable();
+    Provider.of<AssignmentList>(context, listen: false).fetchAssignments();
   }
 
   @override
@@ -35,9 +38,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notify Me'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications_none_outlined),
+            onPressed: () {},
+          ),
+        ],
       ),
       drawer: MainDrawer(),
-      body: Body(),
+      body: NestedScrollView(
+        headerSliverBuilder: (ctx, innerBoxScrolled) => <Widget>[
+          SliverAppBar(
+            leading: SizedBox(),
+            elevation: 0,
+            pinned: false,
+            expandedHeight: 130,
+            backgroundColor: Colors.transparent,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: HomeDetailsCard(),
+              ),
+            ),
+          ),
+        ],
+        body: Body(),
+      ),
     );
   }
 }

@@ -10,7 +10,9 @@ class DBHelper {
       onCreate: (db, version) async {
         await db.execute('CREATE TABLE subjects (id TEXT PRIMARY KEY, name TEXT)');
         await db.execute(
-        'CREATE TABLE timetable (id TEXT PRIMARY KEY, subId TEXT, name TEXT, day INTEGER, time TEXT)');
+        'CREATE TABLE timetable (id TEXT PRIMARY KEY, subId TEXT, day INTEGER, time TEXT)');
+        await db.execute(
+        'CREATE TABLE assignments (id TEXT PRIMARY KEY, subId TEXT, title TEXT, description TEXT, dateTime TEXT)');
       },
       version: 1,
     );

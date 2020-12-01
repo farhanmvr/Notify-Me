@@ -5,8 +5,10 @@ import 'package:provider/provider.dart';
 import './screens/home_screen.dart';
 import './screens/subjects_screen.dart';
 import './screens/time_table_screen.dart';
+import './screens/assignments_screen.dart';
 import './providers/subject_list.dart';
-import 'providers/day_subject_list.dart';
+import './providers/day_subject_list.dart';
+import './providers/assignment_list.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => SubjectList()),
         ChangeNotifierProvider(create: (ctx) => DaySubjects()),
+        ChangeNotifierProvider(create: (ctx) => AssignmentList())
       ],
       child: MaterialApp(
         title: 'Notify Me',
@@ -60,6 +63,7 @@ class MyApp extends StatelessWidget {
         routes: {
           SubjectsScreen.routeName: (ctx) => SubjectsScreen(),
           TimeTableScreen.routeName: (ctx) => TimeTableScreen(),
+          AssignmentsScreen.routeName: (ctx) => AssignmentsScreen(),
         },
       ),
     );

@@ -30,7 +30,6 @@ class _AddDaySubDialogState extends State<AddDaySubDialog> {
     DaySubject sub = DaySubject(
       id: id,
       subId: subject.id,
-      name: subject.name,
       day: Day(widget._index + 1),
       time: _currentTime,
     );

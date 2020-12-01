@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../screens/subjects_screen.dart';
 import '../../screens/time_table_screen.dart';
+import '../../screens/assignments_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key key}) : super(key: key);
@@ -20,20 +21,16 @@ class MainDrawer extends StatelessWidget {
                 Text(
                   'Event Reminder',
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 18,
                   ),
                 ),
                 Text(
                   DateFormat('dd/MM/yyyy').format(DateTime.now()),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
                 )
               ],
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
+              color: Colors.white70,
             ),
           ),
           GestureDetector(
@@ -59,6 +56,19 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(TimeTableScreen.routeName);
+              },
+            ),
+          ),
+          GestureDetector(
+            child: ListTile(
+              title: Text('Assignments'),
+              leading: Icon(
+                Icons.assignment_outlined,
+                color: Color.fromRGBO(0, 0, 0, .65),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AssignmentsScreen.routeName);
               },
             ),
           ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/day_subject.dart';
-import '../Alert/delete_alert.dart';
+import '../alert/delete_alert.dart';
+import '../../models/subject.dart';
+import '../../providers/subject_list.dart';
 
 class SubTile extends StatelessWidget {
   final DaySubject subject;
@@ -16,9 +19,10 @@ class SubTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Subject sub = Provider.of<SubjectList>(context).getSub(subject.subId);
     return ListTile(
       title: Text(
-        subject.name,
+        sub.name,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(subject.time.format(context)),

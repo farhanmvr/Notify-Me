@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 
 import '../models/subject.dart';
 import '../helpers/subject_db_helper.dart';
-import '../helpers/time_table_db_helper.dart';
-import '../helpers/notification_helper.dart';
 import '../helpers/subject_helper.dart';
 
 class SubjectList with ChangeNotifier {
@@ -48,13 +46,6 @@ class SubjectList with ChangeNotifier {
   void deleteSubject(String id) async {
     _subjectList.removeWhere((el) => el.id == id);
     notifyListeners();
-
-    // Delete Notifications
-    final notficationIds = await TimeTableDBHelper.getNotificationIds(id);
-    notficationIds.forEach((el) async {
-      await NotificationHelper.deleteNotificatons(el['id'].hashCode);
-      await NotificationHelper.deleteNotificatons(el['id'].hashCode + 1);
-    });
 
     // Delete form db
     await SubjectDBHelper.deleteById(id);

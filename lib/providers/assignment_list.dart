@@ -25,17 +25,48 @@ class AssignmentList with ChangeNotifier {
     });
   }
 
+  // Delete by id
+  Future<void> deleteById(String id) async {
+    _assignmentList.removeWhere((element) => element.id == id);
+    notifyListeners();
+
+    // Delete assignment Notifications
+    await NotificationHelper.deleteNotificatons(id.hashCode);
+    await NotificationHelper.deleteNotificatons(id.hashCode + 1);
+    await NotificationHelper.deleteNotificatons(id.hashCode + 2);
+    await NotificationHelper.deleteNotificatons(id.hashCode + 3);
+    // Delete from db
+    await AssignmentsDBHelper.deleteById(id);
+  }
+
+  // Delete Assignment by Subject ID
+  Future<void> deleteBySubId(String subId) async {
+    _assignmentList.removeWhere((element) => element.subId == subId);
+    notifyListeners();
+
+    // Delete assignment Notifications
+    final asgmtNtfcnIds = await AssignmentsDBHelper.getNotificationIds(subId);
+    asgmtNtfcnIds.forEach((el) async {
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode);
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode + 1);
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode + 2);
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode + 3);
+    });
+    // Delete from db
+    await AssignmentsDBHelper.deleteBySubId(subId);
+  }
+
   // Fetch all assignments
   Future<void> fetchAssignments() async {
     final data = await AssignmentsDBHelper.assignments;
     data.forEach((el) {
       DateTime date = DateTime.parse(el['dateTime']);
       if (date.compareTo(DateTime.now()) < 0) {
-        AssignmentsDBHelper.deleteExpired(el['id']);
+        AssignmentsDBHelper.deleteById(el['id']);
         NotificationHelper.deleteNotificatons(el['id'].hashCode);
-        NotificationHelper.deleteNotificatons(el['id'].hashCode+1);
-        NotificationHelper.deleteNotificatons(el['id'].hashCode+2);
-        NotificationHelper.deleteNotificatons(el['id'].hashCode+3);
+        NotificationHelper.deleteNotificatons(el['id'].hashCode + 1);
+        NotificationHelper.deleteNotificatons(el['id'].hashCode + 2);
+        NotificationHelper.deleteNotificatons(el['id'].hashCode + 3);
       } else {
         TimeOfDay time = TimeOfDay(hour: date.hour, minute: date.minute);
         _assignmentList.add(Assignment(

@@ -12,9 +12,9 @@ class TimeTableDBHelper {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getNotificationIds(String id) async {
+  static Future<List<Map<String, dynamic>>> getNotificationIds(String subId) async {
     final db = await DBHelper.database();
-    return db.rawQuery('SELECT id FROM timetable WHERE subId = ?', [id]);
+    return db.rawQuery('SELECT id FROM timetable WHERE subId = ?', [subId]);
   }
 
   static Future<List<Map<String, dynamic>>> get timeTable async {
@@ -25,5 +25,10 @@ class TimeTableDBHelper {
   static Future<void> deleteBySubId(String id) async {
     final db = await DBHelper.database();
     await db.rawDelete('DELETE FROM timetable WHERE subId = ?', [id]);
+  }
+
+  static Future<void> deleteById(String id) async {
+    final db = await DBHelper.database();
+    await db.rawDelete('DELETE FROM timetable WHERE id = ?', [id]);
   }
 }

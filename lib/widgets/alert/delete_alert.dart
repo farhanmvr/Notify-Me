@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class DeleteAlert extends StatelessWidget {
   final Function onDelete;
-  DeleteAlert(this.onDelete);
+  String title;
+  String body;
+  String nb;
+  DeleteAlert({this.onDelete, this.body, this.nb, this.title});
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -29,7 +32,7 @@ class DeleteAlert extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        'DELETE SUBJECT',
+                        title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -42,7 +45,7 @@ class DeleteAlert extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    'Are you sure want to delete this subject ?',
+                    body,
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
@@ -50,7 +53,7 @@ class DeleteAlert extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    'NB : This won\'t be able to retrieve once you delete this subject',
+                    'NB : ${nb}',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
@@ -70,7 +73,7 @@ class DeleteAlert extends StatelessWidget {
                           color: Colors.black,
                           textColor: Colors.white,
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(false);
                           },
                         ),
                       ),
@@ -86,6 +89,7 @@ class DeleteAlert extends StatelessWidget {
                           color: Theme.of(context).errorColor,
                           textColor: Colors.white,
                           onPressed: () {
+                            Navigator.of(context).pop(true);
                             onDelete(context);
                           },
                         ),

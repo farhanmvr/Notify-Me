@@ -5,6 +5,7 @@ import '../../models/subject.dart';
 import '../alert/delete_alert.dart';
 import '../../providers/subject_list.dart';
 import '../../providers/day_subject_list.dart';
+import '../../providers/assignment_list.dart';
 
 class SubjectTile extends StatelessWidget {
   final Subject subject;
@@ -16,13 +17,19 @@ class SubjectTile extends StatelessWidget {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => DeleteAlert(onDelete),
+      builder: (ctx) => DeleteAlert(
+        onDelete: onDelete,
+        title: 'DELETE SUBJECT',
+        body: 'Are you sure want to delete this subject ?',
+        nb: 'This won\'t be able to retrieve once you delete this subject',
+      ),
     );
   }
 
   void onDelete(BuildContext context) async {
     await subData.deleteSubject(subject.id);
-    daySubData.deleteDaySubject(subject.id);
+    daySubData.deleteBySubId(subject.id);
+    Provider.of<AssignmentList>(context, listen: false).deleteBySubId(subject.id);
     Navigator.of(context).pop();
   }
 

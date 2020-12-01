@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../models/day_subject.dart';
 import '../helpers/time_table_db_helper.dart';
+import '../helpers/notification_helper.dart';
 
 class DaySubjects with ChangeNotifier {
   List<DaySubject> _monSub = [];
@@ -86,8 +87,8 @@ class DaySubjects with ChangeNotifier {
     notifyListeners();
   }
 
-  // Delete all subjects by id
-  void deleteDaySubject(String id) {
+  // Delete all subjects by subId
+  void deleteBySubId(String id) async {
     _monSub.removeWhere((el) => el.subId == id);
     _tueSub.removeWhere((el) => el.subId == id);
     _wedSub.removeWhere((el) => el.subId == id);
@@ -96,6 +97,31 @@ class DaySubjects with ChangeNotifier {
     _satSub.removeWhere((el) => el.subId == id);
     _sunSub.removeWhere((el) => el.subId == id);
     notifyListeners();
+    // Delete time table Notifications
+    final notficationIds = await TimeTableDBHelper.getNotificationIds(id);
+    notficationIds.forEach((el) async {
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode);
+      await NotificationHelper.deleteNotificatons(el['id'].hashCode + 1);
+    });
+    // Delete from db
+    await TimeTableDBHelper.deleteBySubId(id);
+  }
+
+  // Delete by ID
+  Future<void> deleteById(String id) async {
+    _monSub.removeWhere((el) => el.id == id);
+    _tueSub.removeWhere((el) => el.id == id);
+    _wedSub.removeWhere((el) => el.id == id);
+    _thuSub.removeWhere((el) => el.id == id);
+    _friSub.removeWhere((el) => el.id == id);
+    _satSub.removeWhere((el) => el.id == id);
+    _sunSub.removeWhere((el) => el.id == id);
+    notifyListeners();
+    // Delete Notification
+    await NotificationHelper.deleteNotificatons(id.hashCode);
+    await NotificationHelper.deleteNotificatons(id.hashCode + 1);
+    // Delete from db
+    await TimeTableDBHelper.deleteById(id);
   }
 
   // Sort all arrays

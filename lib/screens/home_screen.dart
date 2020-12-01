@@ -7,6 +7,7 @@ import '../widgets/homeScreen/home_detail_card.dart';
 import '../providers/subject_list.dart';
 import '../providers/day_subject_list.dart';
 import '../providers/assignment_list.dart';
+import '../providers/attendance.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFirst = true;
 
   Future<void> onStart() async {
+    await Provider.of<Attendance>(context, listen: false).fetchGoal();
     await Provider.of<SubjectList>(context, listen: false).fetchAllSubjects();
     await Provider.of<DaySubjects>(context, listen: false).fetchTimeTable();
     Provider.of<AssignmentList>(context, listen: false).fetchAssignments();
@@ -38,12 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notify Me'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_none_outlined),
-            onPressed: () {},
-          ),
-        ],
       ),
       drawer: MainDrawer(),
       body: NestedScrollView(

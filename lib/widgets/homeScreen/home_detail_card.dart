@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/attendance.dart';
+import '../../providers/subject_list.dart';
 
 class HomeDetailsCard extends StatelessWidget {
   Widget _detailsRow({IconData icon, String title, String value}) {
@@ -20,7 +24,10 @@ class HomeDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final totalPercent =
+        (Provider.of<SubjectList>(context).totalPercentage() * 10).truncateToDouble() / 10;
+    final goal = Provider.of<Attendance>(context).goal;
+    final isSafe = totalPercent >= goal;
     return Center(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -40,24 +47,27 @@ class HomeDetailsCard extends StatelessWidget {
                         _detailsRow(
                           icon: Icons.flag,
                           title: 'Goal',
-                          value: '80%',
+                          value: '${goal}%',
                         ),
                         SizedBox(height: 2),
                         _detailsRow(
-                          icon: Icons.bubble_chart,
-                          title: 'Total',
-                          value: '75.4%',
-                        ),
+                            icon: Icons.bubble_chart,
+                            title: 'Total',
+                            value: totalPercent == double.parse(totalPercent.toStringAsFixed(0))
+                                ? totalPercent.toStringAsFixed(0) + '%'
+                                : totalPercent.toString() + '%'),
                       ],
                     ),
                     CircularPercentIndicator(
-                      radius: size.width * .035 + 34,
+                      radius: 55,
                       center: Text(
-                        '80%',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: size.width * .035),
+                        totalPercent == double.parse(totalPercent.toStringAsFixed(0))
+                            ? totalPercent.toStringAsFixed(0) + '%'
+                            : totalPercent.toString() + '%',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
-                      progressColor: Colors.green,
-                      percent: .8,
+                      progressColor: isSafe ? Colors.green : Theme.of(context).errorColor,
+                      percent: totalPercent/100,
                     ),
                   ],
                 ),

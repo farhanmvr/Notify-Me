@@ -8,7 +8,7 @@ class DBHelper {
     return sql.openDatabase(
       path.join(dbPath, 'subjects.db'),
       onCreate: (db, version) async {
-        await db.execute('CREATE TABLE subjects (id TEXT PRIMARY KEY, name TEXT)');
+        await db.execute('CREATE TABLE subjects (id TEXT PRIMARY KEY, name TEXT, present INTEGER DEFAULT 0, absent INTEGER DEFAULT 0)');
         await db.execute(
         'CREATE TABLE timetable (id TEXT PRIMARY KEY, subId TEXT, day INTEGER, time TEXT)');
         await db.execute(

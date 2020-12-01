@@ -3,15 +3,19 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/day_subject.dart';
-import '../../models/subject.dart';
 import '../../providers/subject_list.dart';
+import '../../providers/attendance.dart';
 
 class SubjectTile extends StatelessWidget {
   final DaySubject subject;
   SubjectTile(this.subject);
   @override
   Widget build(BuildContext context) {
-    Subject sub = Provider.of<SubjectList>(context).getSub(subject.subId);
+    final sub = Provider.of<SubjectList>(context).getSub(subject.subId);
+    final subData = Provider.of<SubjectList>(context);
+    final percent = (Provider.of<SubjectList>(context).percentage(sub.id)*10).truncateToDouble()/10;
+    final goal = Provider.of<Attendance>(context).goal;
+    final isSafe = Provider.of<SubjectList>(context).isSafe(goal: goal,id: sub.id);
     return Column(
       children: <Widget>[
         GestureDetector(
@@ -52,7 +56,7 @@ class SubjectTile extends StatelessWidget {
                               width: 6,
                             ),
                             Text(
-                              '2/3',
+                              '${sub.present}/${sub.present + sub.absent}',
                               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 22),
                             ),
                           ],
@@ -73,7 +77,7 @@ class SubjectTile extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                'Attend next 2 classes to get back on track',
+                                subData.status(goal: goal, id: sub.id),
                                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
                               ),
                             )
@@ -86,12 +90,14 @@ class SubjectTile extends StatelessWidget {
                     children: <Widget>[
                       CircularPercentIndicator(
                         radius: 58,
-                        percent: .5,
+                        percent: percent/100,
                         lineWidth: 4,
                         circularStrokeCap: CircularStrokeCap.round,
-                        progressColor: Theme.of(context).errorColor,
+                        progressColor: isSafe ? Colors.green : Theme.of(context).errorColor,
                         center: Text(
-                          '50%',
+                          percent == double.parse(percent.toStringAsFixed(0))
+                              ? percent.toStringAsFixed(0) + '%'
+                              : percent.toString() + '%',
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                       ),
@@ -99,7 +105,7 @@ class SubjectTile extends StatelessWidget {
                         children: <Widget>[
                           GestureDetector(
                             onTap: () {
-                              // subject.addAbsent();
+                              subData.absent(sub.id);
                             },
                             child: CircularPercentIndicator(
                               radius: 30,
@@ -118,7 +124,7 @@ class SubjectTile extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              // subject.addPresent();
+                              subData.present(sub.id);
                             },
                             child: CircularPercentIndicator(
                               radius: 30,

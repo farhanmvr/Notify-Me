@@ -42,7 +42,6 @@ class Body extends StatelessWidget {
         itemBuilder: (context, index) => Column(
           children: [
             SubjectTile(subList[index]),
-            // if (index != subList.length - 1) Divider(),
           ],
         ),
       ),

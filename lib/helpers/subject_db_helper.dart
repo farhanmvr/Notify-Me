@@ -23,4 +23,16 @@ class SubjectDBHelper {
     await db.rawDelete('DELETE FROM subjects WHERE id = ?', [id]);
     await TimeTableDBHelper.deleteBySubId(id);
   }
+
+  // Add present
+  static Future<void> present(String id) async {
+    final db = await DBHelper.database();
+    await db.rawUpdate('UPDATE subjects SET present = present + 1 WHERE id = ?', [id]);
+  }
+
+  // Add absent
+  static Future<void> absent(String id) async {
+    final db = await DBHelper.database();
+    await db.rawUpdate('UPDATE subjects SET absent = absent + 1 WHERE id = ?', [id]);
+  }
 }

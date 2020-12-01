@@ -53,29 +53,35 @@ class _AddAssignmentDialogState extends State<AddAssignmentDialog> {
     Provider.of<AssignmentList>(context, listen: false).addAssignment(assignment);
     Navigator.of(context).pop();
 
-    // Before one day
-    NotificationHelper.scheduleAlarm(
-      dateTime: dateTime.subtract(Duration(days: 1)),
-      id: id.hashCode,
-      title: 'Assignment Alert',
-      body: 'You\'re having ${_titleController.text.trim()} of ${subject.name} tomorrow',
-    );
-    // Before one hour
-    NotificationHelper.scheduleAlarm(
-      dateTime: dateTime.subtract(Duration(hours: 1)),
-      id: id.hashCode + 1,
-      title: 'Assignment Alert',
-      body:
-          'The deadline of ${_titleController.text.trim()} of ${subject.name} is ${_currentTime.format(context)}',
-    );
-    // Before 10 mins
-    NotificationHelper.scheduleAlarm(
-      dateTime: dateTime.subtract(Duration(minutes: 10)),
-      id: id.hashCode + 2,
-      title: 'Assignment Alert',
-      body:
-          'Deadline of ${_titleController.text.trim()} is going to expire in 10 mins, Please submit it',
-    );
+    if (dateTime.subtract(Duration(minutes: 10)).compareTo(DateTime.now()) > 0) {
+      // Before 10 mins
+      NotificationHelper.scheduleAlarm(
+        dateTime: dateTime.subtract(Duration(minutes: 10)),
+        id: id.hashCode + 2,
+        title: 'Assignment Alert',
+        body:
+            'Deadline of ${_titleController.text.trim()} is going to expire in 10 mins, Please submit it',
+      );
+      if (dateTime.subtract(Duration(hours: 1)).compareTo(DateTime.now()) > 0) {
+        // Before one hour
+        NotificationHelper.scheduleAlarm(
+          dateTime: dateTime.subtract(Duration(hours: 1)),
+          id: id.hashCode + 1,
+          title: 'Assignment Alert',
+          body:
+              'The deadline of ${_titleController.text.trim()} of ${subject.name} is ${_currentTime.format(context)}',
+        );
+        if (dateTime.subtract(Duration(days: 1)).compareTo(DateTime.now()) > 0) {
+          // Before one day
+          NotificationHelper.scheduleAlarm(
+            dateTime: dateTime.subtract(Duration(days: 1)),
+            id: id.hashCode,
+            title: 'Assignment Alert',
+            body: 'You\'re having ${_titleController.text.trim()} of ${subject.name} tomorrow',
+          );
+        }
+      }
+    }
     // On Time
     NotificationHelper.scheduleAlarm(
       dateTime: dateTime,

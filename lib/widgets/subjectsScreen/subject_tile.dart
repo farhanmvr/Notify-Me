@@ -30,7 +30,6 @@ class SubjectTile extends StatelessWidget {
     await subData.deleteSubject(subject.id);
     daySubData.deleteBySubId(subject.id);
     Provider.of<AssignmentList>(context, listen: false).deleteBySubId(subject.id);
-    Navigator.of(context).pop();
   }
 
   @override

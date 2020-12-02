@@ -1,4 +1,4 @@
-package com.example.Notify_Me
+package com.farhanmvr.notify_me
 
 import io.flutter.embedding.android.FlutterActivity
 

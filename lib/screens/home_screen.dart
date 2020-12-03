@@ -8,9 +8,11 @@ import '../providers/subject_list.dart';
 import '../providers/day_subject_list.dart';
 import '../providers/assignment_list.dart';
 import '../providers/attendance.dart';
+import '../screens/goal_percent_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
+  final bool isFirst;
+  const HomeScreen({Key key, this.isFirst}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -35,31 +37,37 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
   }
 
+  Widget setGoal() {
+    return GoalPercentScreen(widget.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Notify Me'),
-      ),
-      drawer: MainDrawer(),
-      body: NestedScrollView(
-        headerSliverBuilder: (ctx, innerBoxScrolled) => <Widget>[
-          SliverAppBar(
-            leading: SizedBox(),
-            elevation: 0,
-            pinned: false,
-            expandedHeight: 130,
-            backgroundColor: Colors.transparent,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: HomeDetailsCard(),
-              ),
+    return widget.isFirst
+        ? setGoal()
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Notify Me'),
             ),
-          ),
-        ],
-        body: Body(),
-      ),
-    );
+            drawer: MainDrawer(),
+            body: NestedScrollView(
+              headerSliverBuilder: (ctx, innerBoxScrolled) => <Widget>[
+                SliverAppBar(
+                  leading: SizedBox(),
+                  elevation: 0,
+                  pinned: false,
+                  expandedHeight: 130,
+                  backgroundColor: Colors.transparent,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: HomeDetailsCard(),
+                    ),
+                  ),
+                ),
+              ],
+              body: Body(),
+            ),
+          );
   }
 }

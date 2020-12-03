@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Attendance with ChangeNotifier {
-  int goal = 80;
+  int goal;
 
   // Get goal percentage
   int get goalPercent => goal;
@@ -10,7 +10,7 @@ class Attendance with ChangeNotifier {
   // Fetch goal percentage
   Future<void> fetchGoal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    this.goal = prefs.getInt('goal') ?? 80;
+    this.goal = prefs.getInt('goal');
     notifyListeners();
   }
 

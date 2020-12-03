@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './screens/home_screen.dart';
 import './screens/subjects_screen.dart';
 import './screens/time_table_screen.dart';
 import './screens/assignments_screen.dart';
+import './screens/settings_screen.dart';
+import './screens/appearance_screen.dart';
+import './screens/notification_screen.dart';
 import './providers/subject_list.dart';
 import './providers/day_subject_list.dart';
 import './providers/assignment_list.dart';
@@ -32,11 +36,15 @@ void main() async {
     }
   });
 
-  runApp(MyApp());
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  bool isFirst = pref.getBool('isFirst') ?? true;
+
+  runApp(MyApp(isFirst));
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final isFirst;
+  MyApp(this.isFirst);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -61,11 +69,14 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: HomeScreen(),
+        home: HomeScreen(isFirst: isFirst),
         routes: {
           SubjectsScreen.routeName: (ctx) => SubjectsScreen(),
           TimeTableScreen.routeName: (ctx) => TimeTableScreen(),
           AssignmentsScreen.routeName: (ctx) => AssignmentsScreen(),
+          SettingsScreen.routeName: (ctx) => SettingsScreen(),
+          AppearenceScreen.routeName: (ctx) => AppearenceScreen(),
+          NotificationScreen.routeName: (ctx) => NotificationScreen(),
         },
       ),
     );

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../screens/subjects_screen.dart';
 import '../../screens/time_table_screen.dart';
 import '../../screens/assignments_screen.dart';
+import '../../screens/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key key}) : super(key: key);
@@ -19,7 +20,7 @@ class MainDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Event Reminder',
+                  'Class Reminder',
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -69,6 +70,33 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(AssignmentsScreen.routeName);
+              },
+            ),
+          ),
+          Divider(),
+          GestureDetector(
+            child: ListTile(
+              title: Text('Settings'),
+              leading: Icon(
+                Icons.settings_outlined,
+                color: Color.fromRGBO(0, 0, 0, .65),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(SettingsScreen.routeName);
+              },
+            ),
+          ),
+          GestureDetector(
+            child: ListTile(
+              title: Text('About'),
+              leading: Icon(
+                Icons.info_outline,
+                color: Color.fromRGBO(0, 0, 0, .65),
+              ),
+              onTap: () {
+                // Navigator.of(context).pop();
+                // Navigator.of(context).pushNamed(SettingsScreen.routeName);
               },
             ),
           ),

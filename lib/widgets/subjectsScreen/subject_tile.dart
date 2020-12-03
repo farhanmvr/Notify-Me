@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/subject.dart';
@@ -6,6 +7,7 @@ import '../alert/delete_alert.dart';
 import '../../providers/subject_list.dart';
 import '../../providers/day_subject_list.dart';
 import '../../providers/assignment_list.dart';
+import '../../providers/attendance.dart';
 
 class SubjectTile extends StatelessWidget {
   final Subject subject;
@@ -36,19 +38,51 @@ class SubjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     subData = Provider.of<SubjectList>(context);
     daySubData = Provider.of<DaySubjects>(context);
+    final percent =
+        (Provider.of<SubjectList>(context).percentage(subject.id) * 10).truncateToDouble() / 10;
+    final goal = Provider.of<Attendance>(context).goal;
+    final isSafe = Provider.of<SubjectList>(context).isSafe(goal: goal, id: subject.id);
     return ListTile(
+      leading: CircularPercentIndicator(
+        radius: 40,
+        lineWidth: 4,
+        percent: subData.percentage(subject.id) / 100,
+        progressColor: isSafe
+            ? Colors.green
+            : Theme.of(context).errorColor,
+        center: Text(
+          percent == double.parse(percent.toStringAsFixed(0))
+              ? percent.toStringAsFixed(0) + '%'
+              : percent.toString() + '%',
+          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
+        ),
+      ),
       title: Text(
         subject.name,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-      trailing: IconButton(
-        icon: Icon(
-          Icons.delete_outline,
-          color: Theme.of(context).errorColor,
-        ),
-        onPressed: () {
-          _showAddSubDialog(context);
-        },
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.delete_outline,
+              color: Theme.of(context).errorColor,
+            ),
+            onPressed: () {
+              _showAddSubDialog(context);
+            },
+          ),
+           IconButton(
+            icon: Icon(
+              Icons.edit_outlined,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {
+              // _showAddSubDialog(context);
+            },
+          ),
+        ],
       ),
     );
   }

@@ -5,7 +5,12 @@ class DeleteAlert extends StatelessWidget {
   String title;
   String body;
   String nb;
-  DeleteAlert({this.onDelete, this.body, this.nb, this.title});
+  DeleteAlert({
+    @required this.onDelete,
+    @required this.body,
+    @required this.nb,
+    @required this.title,
+  });
   @override
   Widget build(BuildContext context) {
     return Dialog(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/day_subject.dart';
 import '../../providers/subject_list.dart';
 import '../../providers/attendance.dart';
+import './bottom_sheet.dart';
 
 class SubjectTile extends StatelessWidget {
   final DaySubject subject;
@@ -30,6 +31,13 @@ class SubjectTile extends StatelessWidget {
         GestureDetector(
           onTap: () {
             // Navigator.of(context).pushNamed(CalendarViewScreen.routeName, arguments: subject.id);
+          },
+          onLongPress: () {
+            showModalBottomSheet(
+              context: context,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              builder: (context) => MainBottomSheet(subject.subId),
+            );
           },
           child: Card(
             elevation: 2,

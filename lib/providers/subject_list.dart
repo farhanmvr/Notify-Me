@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../models/subject.dart';
 import '../helpers/subject_db_helper.dart';
 import '../helpers/subject_helper.dart';
+import '../providers/assignment_list.dart';
+import '../providers/day_subject_list.dart';
 
 class SubjectList with ChangeNotifier {
   List<Subject> _subjectList = [];
@@ -42,14 +45,30 @@ class SubjectList with ChangeNotifier {
     });
   }
 
-  // Delete subject
-  void deleteSubject(String id) async {
-    _subjectList.removeWhere((el) => el.id == id);
+  // Edit subject
+  void editSubject(String id, Subject sub) {
+    final subject = _subjectList.firstWhere((el) => el.id == id);
+    subject.name = sub.name;
+    subject.present = sub.present;
+    subject.absent = sub.absent;
     notifyListeners();
+    // update db
+    SubjectDBHelper.editSubject(sub);
+  }
 
+  // Delete subject
+  void deleteSubject(BuildContext context, String id) async {
+    _subjectList.removeWhere((el) => el.id == id);
+
+    // Delete from others
+    Provider.of<DaySubjects>(context, listen: false).deleteBySubId(id);
+    Provider.of<AssignmentList>(context, listen: false).deleteBySubId(id);
+    notifyListeners();
     // Delete form db
     await SubjectDBHelper.deleteById(id);
   }
+
+  //////////////////////////////////////////////////////////////////////////////
 
   // Add present
   void present(String id) {

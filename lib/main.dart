@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => DaySubjects()),
         ChangeNotifierProvider(create: (ctx) => AssignmentList()),
         ChangeNotifierProvider(create: (ctx) => Attendance()),
+
       ],
       child: MaterialApp(
         title: 'Notify Me',

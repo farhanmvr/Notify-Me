@@ -3,11 +3,11 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/subject.dart';
-import '../alert/delete_alert.dart';
 import '../../providers/subject_list.dart';
 import '../../providers/day_subject_list.dart';
-import '../../providers/assignment_list.dart';
 import '../../providers/attendance.dart';
+import '../alert/delete_alert.dart';
+import './edit_sub_dialog.dart';
 
 class SubjectTile extends StatelessWidget {
   final Subject subject;
@@ -28,10 +28,15 @@ class SubjectTile extends StatelessWidget {
     );
   }
 
+  void _showEditSubDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => EditSubDialog(subject.id),
+    );
+  }
+
   void onDelete(BuildContext context) async {
-    await subData.deleteSubject(subject.id);
-    daySubData.deleteBySubId(subject.id);
-    Provider.of<AssignmentList>(context, listen: false).deleteBySubId(subject.id);
+    await subData.deleteSubject(context, subject.id);
   }
 
   @override
@@ -47,9 +52,7 @@ class SubjectTile extends StatelessWidget {
         radius: 40,
         lineWidth: 4,
         percent: subData.percentage(subject.id) / 100,
-        progressColor: isSafe
-            ? Colors.green
-            : Theme.of(context).errorColor,
+        progressColor: isSafe ? Colors.green : Theme.of(context).errorColor,
         center: Text(
           percent == double.parse(percent.toStringAsFixed(0))
               ? percent.toStringAsFixed(0) + '%'
@@ -73,13 +76,13 @@ class SubjectTile extends StatelessWidget {
               _showAddSubDialog(context);
             },
           ),
-           IconButton(
+          IconButton(
             icon: Icon(
               Icons.edit_outlined,
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () {
-              // _showAddSubDialog(context);
+              _showEditSubDialog(context);
             },
           ),
         ],

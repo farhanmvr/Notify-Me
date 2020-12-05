@@ -35,24 +35,20 @@ class Body extends StatelessWidget {
         subList = daySubData.sunSub;
         break;
     }
-    return ScrollConfiguration(
-      behavior: MyBehavior(),
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (n) {
+        if (n.leading) n.disallowGlow();
+        return true;
+      },
       child: ListView.builder(
         itemCount: subList.length,
         itemBuilder: (context, index) => Column(
           children: [
             SubjectTile(subList[index]),
-            if(index==subList.length-1) SizedBox(height: 12),
+            if (index == subList.length - 1) SizedBox(height: 12),
           ],
         ),
       ),
     );
-  }
-}
-
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../models/day_subject.dart';
 import '../../providers/subject_list.dart';
 import '../../providers/attendance.dart';
+import '../../screens/calendar_screen.dart';
+import '../common/bubble.dart';
 import './bottom_sheet.dart';
 
 class SubjectTile extends StatelessWidget {
@@ -22,15 +24,21 @@ class SubjectTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: 15, top: 4),
-          child: Text(
-            subject.time.format(context),
-            style: TextStyle(fontSize: 10),
+          padding: const EdgeInsets.only(left: 15, top: 4,right: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                subject.time.format(context),
+                style: TextStyle(fontSize: 10),
+              ),
+              Bubbles(),
+            ],
           ),
         ),
         GestureDetector(
           onTap: () {
-            // Navigator.of(context).pushNamed(CalendarViewScreen.routeName, arguments: subject.id);
+            Navigator.of(context).pushNamed(CalendarScreen.routeName, arguments: subject.id);
           },
           onLongPress: () {
             showModalBottomSheet(

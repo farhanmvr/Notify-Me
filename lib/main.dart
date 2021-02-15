@@ -10,6 +10,7 @@ import './screens/assignments_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/appearance_screen.dart';
 import './screens/notification_screen.dart';
+import './screens/calendar_screen.dart';
 import './providers/subject_list.dart';
 import './providers/day_subject_list.dart';
 import './providers/assignment_list.dart';
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           AppearenceScreen.routeName: (ctx) => AppearenceScreen(),
           NotificationScreen.routeName: (ctx) => NotificationScreen(),
+          CalendarScreen.routeName: (ctx) => CalendarScreen(),
         },
       ),
     );

@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/subject_list.dart';
+import '../subjectsScreen/edit_sub_dialog.dart';
 import '../alert/delete_alert.dart';
 
 class MainBottomSheet extends StatelessWidget {
   String subId;
   MainBottomSheet(this.subId);
+
+  void _showEditDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => EditSubDialog(subId),
+    );
+  }
 
   void _showDeleteAlert(BuildContext context) {
     showDialog(
@@ -21,7 +29,7 @@ class MainBottomSheet extends StatelessWidget {
   }
 
   void _onDelete(BuildContext context) {
-    Provider.of<SubjectList>(context, listen: false).deleteSubject(context,subId);
+    Provider.of<SubjectList>(context, listen: false).deleteSubject(context, subId);
     Navigator.of(context).pop();
   }
 
@@ -36,6 +44,10 @@ class MainBottomSheet extends StatelessWidget {
             'Edit Subject',
             style: TextStyle(fontWeight: FontWeight.w400),
           ),
+          onTap: () {
+            Navigator.of(context).pop();
+            _showEditDialog(context);
+          },
         ),
         ListTile(
           leading: Icon(Icons.delete_outline),
